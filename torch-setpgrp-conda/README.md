@@ -43,6 +43,8 @@ FAIL: Process timed out after 20 seconds
 
 Only the last case fails, where we have both `os.setpgrp` and `import torch`.
 
+(Fwiw replacing `os.setpgrp` with `os.setpgid(0,0)` results in the same behavior.)
+
 ## Working example: Conda with Python 3.12
 
 ```shell
