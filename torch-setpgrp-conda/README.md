@@ -1,4 +1,4 @@
-# Torch setpgrp Conda bug demo
+# Torch `setpgrp` Conda bug demo
 
 Python hangs if you do ALL of the following:
 
@@ -42,8 +42,6 @@ FAIL: Process timed out after 20 seconds
 ```
 
 Only the last case fails, where we have both `os.setpgrp` and `import torch`.
-
-(Fwiw `os.setpgid` results in the same behavior.)
 
 ## Working example: Conda with Python 3.12
 
