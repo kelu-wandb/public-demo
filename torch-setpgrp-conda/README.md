@@ -1,11 +1,11 @@
 # Torch setpgrp Conda bug demo
 
-The bug is that Python hangs if you do ALL of the following:
+Python hangs if you do ALL of the following:
 
 - Use Miniconda (passes with `python -m venv`)
 - Create environment with Python 3.13 (passes with 3.12)
-- Run python via `subprocess.Popen` with `preexec_fn=os.setpgrp` (passes without `os.setpgrp`)
-- Python script contains `import torch` (passes without it)
+- Run python code via `subprocess.Popen` with `preexec_fn=os.setpgrp` (passes without `os.setpgrp`)
+- Python code contains `import torch` (passes without it)
 
 Combining all of these results in the subprocess hanging.
 
