@@ -11,7 +11,12 @@ Combining all of these results in the subprocess hanging.
 
 Changing any one of the conditions allows it to pass.
 
-(This is reproducible with either `pytorch` from `conda-forge` or installing `torch` via `pip`.)
+## Unrelated Factors
+
+Bug remains reproducible if you:
+
+- install pytorch via either `pytorch` from `conda-forge` or `torch` via `pip`.
+- use pytorch `2.7.1` or `2.6.0`
 
 ## Steps to Reproduce (Conda with Python 3.13, pytorch from conda-forge)
 
