@@ -2,7 +2,7 @@
 
 Python hangs if you do ALL of the following:
 
-- Use Miniconda (passes with `python -m venv`)
+- Use Miniconda (passes with `python -m venv` and `pyenv virtualenv`)
 - Create environment with Python 3.13 (passes with 3.12)
 - Run python code via `subprocess.Popen` with `preexec_fn=os.setpgrp` (passes without `os.setpgrp`)
 - Python code contains `import torch` (passes without it)
@@ -11,7 +11,9 @@ Combining all of these results in the subprocess hanging.
 
 Changing any one of the conditions allows it to pass.
 
-## Steps to Reproduce (Conda with Python 3.13)
+(This is reproducible with either `pytorch` from `conda-forge` or installing `torch` via `pip`.)
+
+## Steps to Reproduce (Conda with Python 3.13, pytorch from conda-forge)
 
 The following is all on macOS Sequoia 15.5.
 
@@ -45,6 +47,24 @@ Only the last case fails, where we have both `os.setpgrp` and `import torch`.
 
 (Fwiw replacing `os.setpgrp` with `os.setpgid(0,0)` results in the same behavior.)
 
+## Alternate Steps to Reproduce (Conda with Python 3.13, torch from pip)
+
+```shell
+% conda create -n "torch-setpgr-3.13-pip" python=3.13
+% conda activate torch-setpgr-3.13-pip
+% pip install numpy torch
+% python torch-setpgrp-test.py
+Testing YES preexec_fn=os.setpgrp, NO import torch...
+=== SUCCESS: YES os.setpgrp, NO torch import
+PASS
+Testing NO preexec_fn=os.setpgrp, YES import torch...
+=== SUCCESS: NO os.setpgrp, YES import torch
+PASS
+Testing YES preexec_fn=os.setpgrp, YES import torch...
+FAIL: Process timed out after 20 seconds
+% conda deactivate
+```
+
 ## Working example: Conda with Python 3.12
 
 ```shell
@@ -64,6 +84,8 @@ PASS
 ```
 
 All cases pass.
+
+(They also pass with Python 3.12 if you use `pip` to install `torch`.)
 
 ## Working example: Venv with Python 3.13
 
@@ -98,4 +120,4 @@ PASS
 
 All cases pass.
 
-(Fwiw also tested via `poyenv virtualenv`, and it works fine with that, too.)
+(Fwiw also tested via `pyenv virtualenv`, and it works fine with that, too.)
